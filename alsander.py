@@ -139,8 +139,8 @@ def compare(filedict,newdatadict):
 			if eachline[0] in newdatadict:
 				#print("newdatadict",newdatadict)
 				new_exp = newdatadict[eachline[0]][2] - eachline[2]
-				print("new_exp",new_exp)
-				new_dict[eachline[0]] = [eachline[0],eachline[1],new_exp]
+				#print("new_exp",new_exp)
+				new_dict[eachline[0]] = [eachline[0],newdatadict[eachline[0]][1],new_exp]
 	return new_dict
 
 test ={}
@@ -160,7 +160,7 @@ for nameVocation in qualified_list:
 		
 if os.path.exists(filename):
 	unsorted_dict = compare(data_from_file(filename),test)
-	print(unsorted_dict)
+	#print(unsorted_dict)
 		
 one_time_categorized = categorize(unsorted_dict)
 final_product = sorting(one_time_categorized)
@@ -187,25 +187,26 @@ for key, values in final_product.items():
 	#html+="============================<br>"
 	html+="<table>"
 	color = "white"
+	color2= "white"
 	player = ""
 	if not os.path.exists(filename):
 		for member in values:
 			player = member[0]
-			# we can color green when they reach required EXP for the month
-			#if member[2] > 249:
-			#    color = "#FFFFFF"
-			#else:
-			#    color = "#40E0D0"
 			html+='<tr><td><font color="'+color+'">['+str(member[1])+']</font></td><td><a href="https://www.tibia.com/community/?name='+member[0]+'" target="_blank" rel="noopener noreferrer"> '+player+'</a></td></tr>'
 	else:
 		for member in values:
 			player = member[0]
 			# we can color green when they reach required EXP for the month
-			#if member[2] > 249:
-			#    color = "#FFFFFF"
-			#else:
-			#    color = "#40E0D0"
-			html+='<tr><td><font color="'+color+'">['+str(member[1])+']</font></td><td><a href="https://www.tibia.com/community/?name='+member[0]+'" target="_blank" rel="noopener noreferrer"> '+player+'</a> '+str(member[2])+'</td></tr>'
+			print(player)
+			if member[2] > 170000000 and member[1] <400:
+				color2 = "#5DE23C"
+			elif member[2] > 320000000 and member[1] <600:
+				color2 = "#5DE23C"
+			elif member[2] > 400000000 and member[1] >599:
+				color2 = "#5DE23C"
+			else:
+				color2 = "white"
+			html+='<tr><td><font color="'+color+'">['+str(member[1])+']</font></td><td><a href="https://www.tibia.com/community/?name='+member[0]+'" target="_blank" rel="noopener noreferrer"> '+player+'</a> <font color="'+color2+'">'+str(member[2])+'</font></td></tr>'
 	html+="</table></p></td>"
 html+="</tr></table>"
 html+="<center>=====================================</center>"

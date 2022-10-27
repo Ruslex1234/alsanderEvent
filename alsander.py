@@ -113,9 +113,9 @@ def categorize(dictionary):
 	categorized[600] = []
 	categorized[2000] = []
 	for key, each in dictionary.items():
-		if each[1] >599:
+		if each[1] >600:
 			categorized[2000].append(each)
-		elif each[1] > 399:
+		elif each[1] > 400:
 			categorized[600].append(each)
 		else:
 			categorized[400].append(each)
@@ -140,7 +140,7 @@ def compare(filedict,newdatadict):
 				#print("newdatadict",newdatadict)
 				new_exp = newdatadict[eachline[0]][2] - eachline[2]
 				#print("new_exp",new_exp)
-				new_dict[eachline[0]] = [eachline[0],newdatadict[eachline[0]][1],new_exp]
+				new_dict[eachline[0]] = [eachline[0],eachline[1],new_exp]
 	return new_dict
 
 test ={}
@@ -197,7 +197,6 @@ for key, values in final_product.items():
 		for member in values:
 			player = member[0]
 			# we can color green when they reach required EXP for the month
-			print(player)
 			if member[2] > 170000000 and member[1] <400:
 				color2 = "#5DE23C"
 			elif member[2] > 320000000 and member[1] <600:
@@ -206,7 +205,8 @@ for key, values in final_product.items():
 				color2 = "#5DE23C"
 			else:
 				color2 = "white"
-			html+='<tr><td><font color="'+color+'">['+str(member[1])+']</font></td><td><a href="https://www.tibia.com/community/?name='+member[0]+'" target="_blank" rel="noopener noreferrer"> '+player+'</a> <font color="'+color2+'">'+str(member[2])+'</font></td></tr>'
+			if member[2] != 0:
+				html+='<tr><td><font color="'+color+'">['+str(member[1])+']</font></td><td><a href="https://www.tibia.com/community/?name='+member[0]+'" target="_blank" rel="noopener noreferrer"> '+player+'</a> <font color="'+color2+'">'+str(f"{member[2]:,}")+'</font></td></tr>'
 	html+="</table></p></td>"
 html+="</tr></table>"
 html+="<center>=====================================</center>"

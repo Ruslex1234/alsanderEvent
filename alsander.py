@@ -139,9 +139,23 @@ def compare(filedict,newdatadict):
 			if eachline[0] in newdatadict:
 				#print("newdatadict",newdatadict)
 				new_exp = newdatadict[eachline[0]][2] - eachline[2]
+				level_diff = newdatadict[eachline[0]][1] - eachline[1]
 				#print("new_exp",new_exp)
-				new_dict[eachline[0]] = [eachline[0],eachline[1],new_exp]
+				new_dict[eachline[0]] = [eachline[0],eachline[1],new_exp,level_diff]
 	return new_dict
+
+def refresh_name(final_file):
+	refresh_dict = {}
+	for lvl_category, lvl_category_pack in final_file.items():
+		refresh_dict[lvl_category] = []
+		for each_entry in lvl_category_pack:
+			char_url = url ="https://api.tibiadata.com/v3/character/{}"
+			char_response = requests.get(char_url.format(each_entry[0])).json()
+			updated_name = char_response["characters"]["character"]["name"]
+			refresh_dict[lvl_category].append([updated_name,each_entry[1],each_entry[2]])
+	return refresh_dict
+
+
 
 test ={}
 #vocations = ["druids"]
@@ -206,7 +220,7 @@ for key, values in final_product.items():
 			else:
 				color2 = "white"
 			if member[2] != 0:
-				html+='<tr><td><font color="'+color+'">['+str(member[1])+']</font></td><td><a href="https://www.tibia.com/community/?name='+member[0]+'" target="_blank" rel="noopener noreferrer"> '+player+'</a> <font color="'+color2+'">'+str(f"{member[2]:,}")+'</font></td></tr>'
+				html+='<tr><td><font color="'+color+'">['+str(member[3])+']</font></td><td><a href="https://www.tibia.com/community/?name='+member[0]+'" target="_blank" rel="noopener noreferrer"> '+player+'</a> <font color="'+color2+'">'+str(f"{member[2]:,}")+'</font></td></tr>'
 	html+="</table></p></td>"
 html+="</tr></table>"
 html+="<center>=====================================</center>"
@@ -217,6 +231,8 @@ if not os.path.exists(filename):
 	print("writing new file locally")
 	write_to_file(final_product)	
 	print("wrote new file locally")
+else:
+	write_to_file(refresh_name(data_from_file(filename)))
 print("sending file to html page")
 send_file_s3(html)
 print("sent file to html page")
